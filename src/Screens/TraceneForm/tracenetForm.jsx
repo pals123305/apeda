@@ -133,7 +133,7 @@ function TracenetForm() {
     const key = e.target.name;
     const value = e.target.value;
     // const item = {
-    //   [name]: valuech
+    //   [name]: value
     // }
     const item = {}
     inputs.radio_selection[key] = name
