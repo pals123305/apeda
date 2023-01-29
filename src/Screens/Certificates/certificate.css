@@ -1,0 +1,13 @@
+.drop{
+    color: black;
+    background-color: transparent;
+    border-color: transparent;
+    border-bottom: 2px solid black ;
+    width: 40%;
+}
+.dropmenu {
+    width: 40%;
+}
+drop :focus{
+    background-color: transparent;
+}
