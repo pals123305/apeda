@@ -1,0 +1,18 @@
+.downloadbtn {
+    width: 100%;
+}
+
+.content-wrapper {
+    background: #f4f6f9;
+    min-height: 85vh;
+}
+
+.selectflowFormate {
+    border-color: transparent;
+    color: black;
+    border-bottom: 1px solid #333;
+    border-radius: 0.25rem;
+    width: 100%;
+    padding: 0.375rem 0.75rem;
+    background-color: white;
+}
