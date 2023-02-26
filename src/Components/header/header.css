@@ -1,10 +1,14 @@
-.content-header{
+/* .content-header{
     padding-left: 265px;
-}
+} */
 @media (min-width: 1215px){
 .navbar-expand-lg .navbar-collapse {
     display: flex!important;
     flex-basis: auto;
     min-width: auto;
 }
+}
+
+.link {
+    color: rgba(0,0,0,.5)
 }

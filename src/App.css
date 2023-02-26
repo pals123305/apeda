@@ -37,6 +37,7 @@
   }
 }
 .content-wrapper {
-  margin-bottom: -90px;
-  padding-top: 30px;
+  /* margin-bottom: -90px;
+  padding-top: 30px; */
+  min-height: 100px;
 }

@@ -2,12 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { Button, Form, InputGroup, Row, Col } from 'react-bootstrap'
 import './tracenetForm.css'
 import axios from 'axios';
+import Navigation from '../../Components/navigation/navigation';
+import {useLocation} from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 
-function TracenetForm() {
-
+function TracenetForm(state) {
+  
+  const location = useLocation();
   const [inputs, setInput] = useState({
-    "username": '',
-    "password": '',
+    "username": location.state ? location.state.tracenet_username : null,
+    "password": location.state ? location.state.tracenet_password : null,
     "flow": '',
     "file": '',
     "radio_selection": {}
@@ -38,11 +42,11 @@ function TracenetForm() {
     {
       "option": "internal_inspection",
       "nested_option": [{
-        "Select_Scope": {
-          "mid_year": "Mid Year",
+        "Select_Scope_type": {
+          "mid_year": "Home Page Internal Inspection",
           "scope_renewal": "Scope Renewal"
         },
-        "Select_Year": {
+        "Select_Scope": {
           "Current": "Current",
           "Previous": "Previous"
         }
@@ -98,13 +102,14 @@ function TracenetForm() {
           "post harvest activities": "Post Harvest Activities"
         },
         "Select_Scope": {
-          "old_ICS": "Old ICS",
-          "new_ICS": "New ICS",
+          "old_ICS": "Renewal Crop Entry",
+          "new_ICS": "New ICS Crop Entry",
           "amendment": "Amendment"
         }
       }]
     }
   ]
+  
 
   const handleSubmit = (event) => {
     const form = event.currentTarget;
@@ -116,15 +121,46 @@ function TracenetForm() {
       event.stopPropagation();
     }
     setValidated(true);
+   
+    
+    
+  //   axios.post("http://localhost:8000/tracenet/", data, 
+  //   {
+  //     headers : {'Content-Type': 'multipart/form-data'}
+  // }
+  //   )
+  //     .then((res) =>
+  //       console.log(res.status_code)
+  //     )
+  //     .catch((error) => {
+  //       console.log(error)
+  //     })
 
-    axios.post("http://localhost:8000/tracenet/", inputs
-    )
-      .then((res) =>
+
+  const data = {}
+  data.username = inputs.username
+  data.password = inputs.password
+  data.flow = inputs.flow
+  data.options = inputs.radio_selection
+  console.log(data.options)
+  const formData = new FormData();
+  formData.append("file", inputs.file)
+  
+ 
+  console.log(typeof(data))
+  formData.append("data", JSON.stringify(data))
+  // formData.append("data")
+  console.log(formData)
+  axios.post(
+    "http://localhost:8000/tracenet/", formData,
+    {
+          headers : {'Content-Type': 'multipart/form-data'}
+      }
+    
+  )
+  .then((res) =>
         console.log(res.status_code)
       )
-      .catch((error) => {
-        console.log(error)
-      })
   }
 
   const radioSelector = (e) => {
@@ -132,19 +168,22 @@ function TracenetForm() {
     const name = e.target.id
     const key = e.target.name;
     const value = e.target.value;
+    console.log(name, key, value)
     // const item = {
     //   [name]: value
     // }
-    const item = {}
+    // const item = {}
     inputs.radio_selection[key] = name
-    
-    // setRadioOption(radioOption)
+  //   setRadioOption({
+  //     [key]: name
+  // })
+    // setRadioOption({...prevState , [key]:name})
     console.log(inputs)
   }
 
   // useEffect(() => {
   //   if (radioOption) {
-  //     inputs.radio_selection.data = radioOption;
+  //     inputs.radio_selection.push(radioOption);
   //     console.log(inputs)
   //   }
   // }, [radioOption]);
@@ -190,12 +229,13 @@ function TracenetForm() {
   }
 
   return (
-    <div className="content-wrapper">
-      <div className="content">
+      <div className="content-wrapper">
+        
         <div className="container-fluid">
           <div className="card" >
             <div className="card-header">Sign In using Tracenet credentials</div>
             <div className="card-body">
+              {/* {console.log(location.state.tracenet_username)} */}
               <Form noValidate validated={validated} onSubmit={handleSubmit}>
                 <Row className="mb-3">
                   <Form.Group as={Col} md="8" controlId="validationCustomUsername">
@@ -209,7 +249,7 @@ function TracenetForm() {
                         required
                         name="username"
                         onChange={inputHandler}
-                      // value={inputs.userrname}
+                      value={location.state ? location.state.tracenet_username : null}
                       />
                       <Form.Control.Feedback type="invalid">
                         Please choose a username.
@@ -220,10 +260,10 @@ function TracenetForm() {
                     <Form.Label>Password</Form.Label>
                     <Form.Control
                       required
-                      type="text"
+                      type="password"
                       name="password"
                       placeholder="****"
-                      // value={inputs.password || ""}
+                      value={location.state ? location.state.tracenet_password : null}
                       onChange={inputHandler}
                     />
                     <Form.Control.Feedback type="invalid">Incorrect Password</Form.Control.Feedback>
@@ -233,10 +273,10 @@ function TracenetForm() {
                     <Form.Select aria-label="Default select example" size='lg' className='selectflow' name='flow' onChange={inputHandler}>
                       <option>select Flow</option>
                       <option value="farmer_registration">Farmer Registration</option>
+                      <option value="crop_entry">Add Products</option>
+                      <option value="harvesting">Actual Yield Updation</option>
                       <option value="internal_inspection">Internal Inspection</option>
                       <option value="lot_creation">Lot Creation</option>
-                      <option value="crop_entry">Crop Entry</option>
-                      <option value="harvesting">Harvesting</option>
                     </Form.Select>
                     <Form.Control.Feedback type="invalid">Looks good!</Form.Control.Feedback>
                   </Form.Group>
@@ -275,7 +315,6 @@ function TracenetForm() {
 
         </div>
       </div>
-    </div>
   )
 }
 

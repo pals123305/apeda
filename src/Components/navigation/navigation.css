@@ -1,7 +1,13 @@
-.navbar-expand-lg .navbar-collapse {
+/* .navbar-expand-lg .navbar-collapse {
     display: -ms-flexbox!important;
     display: flex!important;
     -ms-flex-preferred-size: auto;
     flex-basis: auto;
     min-width: 700px;
+} */
+.content-wrapper.content_head {
+    min-height: 0px !important;
+}
+.link {
+    color: rgba(0,0,0,.5)
 }
